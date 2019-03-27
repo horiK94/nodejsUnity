@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using WebSocketSharp;
+using System;
 
 public class ClientExample : MonoBehaviour {
     
@@ -43,7 +44,19 @@ public class ClientExample : MonoBehaviour {
         if(worldPos != beforePos)
         {
             beforePos = worldPos;
-            this.ws.Send(worldPos.ToString());
+
+            PlayerPosition playerPosition = new PlayerPosition();
+            playerPosition.playerId = 0;
+            playerPosition.position = worldPos;
+            playerPosition.date = DateTime.Now;
+            this.ws.Send(JsonUtility.ToJson(playerPosition));
         }
     }
+}
+
+struct PlayerPosition
+{
+    public int playerId;
+    public Vector3 position;
+    public DateTime date;
 }
